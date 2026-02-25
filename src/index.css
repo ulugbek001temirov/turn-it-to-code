@@ -59,3 +59,12 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Hide all scrollbars globally but keep scrolling */
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
