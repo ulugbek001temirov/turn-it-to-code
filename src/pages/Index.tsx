@@ -1,4 +1,5 @@
-import { Bell, Send, ArrowDownLeft, RefreshCw, MoreHorizontal, Home, Wallet, BarChart3, Settings, Play, DollarSign, Flower2 } from "lucide-react";
+import { Bell, Send, ArrowDownLeft, RefreshCw, MoreHorizontal, Home, Wallet, BarChart3, Settings, Play, DollarSign, Flower2,BookMarked,CreditCard } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const cards = [
   {
@@ -109,18 +110,60 @@ const Index = () => {
             </div>
           </section>
 
-          {/* Payments */}
+          {/* Income & Expenses Pie Chart */}
           <section className="mb-6">
-            <h2 className="text-base font-semibold text-foreground mb-3">Payments</h2>
-            <div className="grid grid-cols-4 gap-3">
-              {payments.map(({ icon: Icon, label }) => (
-                <button key={label} className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center">
-                    <Icon size={20} className="text-primary" />
-                  </div>
-                  <span className="text-xs text-muted-foreground">{label}</span>
-                </button>
-              ))}
+            <h2 className="text-base font-semibold text-foreground mb-3">Income & Expenses</h2>
+            <div className="w-full flex flex-row items-center justify-center gap-8 h-40 bg-secondary rounded-2xl p-4 shadow-lg">
+              {/* Pie Chart слева */}
+              <div className="w-1/2 flex justify-center">
+                <ResponsiveContainer width={135} height={135}>
+                  <PieChart>
+                    <defs>
+                      <linearGradient id="incomeGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#34d399" />
+                        <stop offset="100%" stopColor="#22c55e" />
+                      </linearGradient>
+                      <linearGradient id="expensesGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#f87171" />
+                        <stop offset="100%" stopColor="#ef4444" />
+                      </linearGradient>
+                    </defs>
+                    <Pie
+                      data={[
+                        { name: 'Income', value: 850 },
+                        { name: 'Expenses', value: 11.99 + 1350 },
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={32}
+                      outerRadius={50}
+                      paddingAngle={4}
+                      dataKey="value"
+                    >
+                      <Cell key="income" fill="url(#incomeGradient)" />
+                      <Cell key="expenses" fill="url(#expensesGradient)" />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              {/* Подписи справа */}
+              <div className="w-1/2 flex flex-col gap-4">
+                {(() => {
+                  const data = [
+                    { name: 'Income', value: 850, color: 'linear-gradient(90deg,#34d399,#22c55e)' },
+                    { name: 'Expenses', value: 11.99 + 1350, color: 'linear-gradient(90deg,#f87171,#ef4444)' },
+                  ];
+                  return data.map((item) => (
+                    <div key={item.name} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: item.color }}></span>
+                        <span className="text-xs text-foreground font-medium">{item.name}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-foreground max-w-[90px] truncate text-right">${item.value.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                    </div>
+                  ));
+                })()}
+              </div>
             </div>
           </section>
 
@@ -158,9 +201,10 @@ const Index = () => {
           <div className="flex justify-around">
             {[
               { icon: Home, label: "Home", active: true },
-              { icon: Wallet, label: "Wallet", active: false },
-              { icon: BarChart3, label: "Statistic", active: false },
-              { icon: Settings, label: "Settings", active: false },
+              { icon: CreditCard, label: "Pay", active: false },
+              { icon: DollarSign, label: "Transfer", active: false },
+              { icon: BookMarked, label: "Reports", active: false },
+              { icon: Wallet, label: "Budget", active: false },
             ].map(({ icon: Icon, label, active }) => (
               <button key={label} className="flex flex-col items-center gap-1">
                 <Icon size={20} className={active ? "text-nav-active" : "text-muted-foreground"} />
